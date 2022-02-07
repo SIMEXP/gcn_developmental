@@ -1,0 +1,3 @@
+[submodule "gcn_package"]
+	path = gcn_package
+	url = git@github.com:SIMEXP/gcn_package.git
