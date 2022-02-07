@@ -159,6 +159,12 @@ if __name__ == '__main__':
             sep='\t', index=False)
         del raw_timeseries
 
+        masker = NiftiMapsMasker(maps_img=atlas["map"],
+                                    mask_img=brain_mask,
+                                    standardize=True, detrend=True,
+                                    memory=MEMORY_CACHE,
+                                    memory_level=1)
+
         print("cleaned timeseries")
         timeseries = masker.fit_transform(fmri, confounds, sample_mask)
 
