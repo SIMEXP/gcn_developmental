@@ -6,11 +6,11 @@ from gcn_package.features.graph_construction import make_group_graph
 from gcn_package.data.time_windows_dataset import TimeWindowsDataset
 from gcn_package.models.gcn import HaoGCN
 
-
+# some parameters here
 dimension = 1024
 window_length = 20
 random_seed = 0
-batch_size = 32
+batch_size = 16
 epochs = 30
 
 dic_labels = {'adult': 0, 'child': 1}
@@ -18,6 +18,10 @@ dic_labels = {'adult': 0, 'child': 1}
 data_path = Path(__file__).parents[1] / "data/processed/"
 # get subject id and label
 participants = pd.read_csv(data_path / "participants.tsv", index_col=0, header=0, sep='\t')
+labels = participants['Child_Adult']
+
+# select balanced child and adult
+participants = participants[89: ]
 labels = participants['Child_Adult']
 
 # make a group graph
@@ -108,6 +112,7 @@ gcn = HaoGCN(graph.edge_index,
             n_timepoints=window_length,
             n_classes=2)
 
+# NOTE - Early stopping: https://clay-atlas.com/us/blog/2021/08/25/pytorch-en-early-stopping/
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
 
@@ -156,19 +161,5 @@ for t in range(epochs):
     print(f"Valid metrics:\n\t avg_loss: {loss:>8f};\t avg_accuracy: {(100*correct):>0.1f}%")
 
 # results
-# loss, correct = valid_test_loop(test_generator, gcn, loss_fn)
-from sklearn.metrics import confusion_matrix
-
-size = len(test_generator.dataset)
-loss, correct = 0, 0
-
-with torch.no_grad():
-    for X, y in test_generator:
-        pred = gcn.forward(X)
-        loss += loss_fn(pred, y).item()
-        cur_correct = (pred.argmax(1) == y).type(torch.float).sum().item()
-        correct += cur_correct
-
-loss /= size
-correct /= size
+loss, correct = valid_test_loop(test_generator, gcn, loss_fn)
 print(f"Test metrics:\n\t avg_loss: {loss:>f};\t avg_accuracy: {(100*correct):>0.1f}%")
