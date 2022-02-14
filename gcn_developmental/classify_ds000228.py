@@ -7,7 +7,7 @@ from nilearn.maskers import NiftiMapsMasker
 from nilearn.plotting import plot_matrix, plot_stat_map
 from gcn_package.features.graph_construction import make_group_graph
 from gcn_package.data.time_windows_dataset import TimeWindowsDataset
-from gcn_package.models.gcn import HaoGCN
+from gcn_package.models.gcn import YuGCN
 
 # some parameters here
 dimension = 64
