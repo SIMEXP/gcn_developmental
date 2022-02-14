@@ -130,7 +130,6 @@ gcn = HaoGCN(graph.edge_index,
             n_timepoints=window_length,
             n_classes=2)
 
-# NOTE - Early stopping: https://clay-atlas.com/us/blog/2021/08/25/pytorch-en-early-stopping/
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     training_loss, training_correct = 0, 0
@@ -146,16 +145,15 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         optimizer.step()
 
         loss, current = loss.item(), batch * dataloader.batch_size
-
         correct = (pred.argmax(1) == y).type(torch.float).sum().item()
         training_loss += loss
         training_correct += correct
 
         correct /= X.shape[0]
-
+        # cutting the log size
         if (batch % 10 == 0) or (current == size):
             print(f"#{batch:>5};\ttrain_loss: {loss:>0.3f};\ttrain_accuracy:{(100*correct):>5.1f}%\t\t[{current:>5d}/{size:>5d}]")
-
+    # training performance summary
     training_loss /= size
     training_correct /= size
     return training_loss, training_correct
