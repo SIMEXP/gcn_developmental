@@ -53,7 +53,6 @@ graph = make_group_graph(connectomes, k=8)
 
 
 # split the data by time window size and save to file
-
 label_df = pd.DataFrame(columns=['label', 'filename'])
 split_twindow_dir = data_path / "processed" / 'split_timewindow'
 split_twindow_dir.mkdir(parents=True, exist_ok=True)
