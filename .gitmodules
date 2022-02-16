@@ -1,3 +1,6 @@
 [submodule "gcn_package"]
 	path = gcn_package
 	url = git@github.com:SIMEXP/gcn_package.git
+[submodule "mist2templateflow"]
+	path = mist2templateflow
+	url = git@github.com:SIMEXP/mist2templateflow.git
